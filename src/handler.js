@@ -1,38 +1,53 @@
-const predictHandler = async (request, h) => {
-    try {
-        const { image } = request.payload;
+const { nanoid } = require('nanoid');
+// const fs = require('fs');
 
-        if (!image || image.hapi.size > 1000000) {
-            const response = h.response({
+const handlePredict = async (request, h) => {
+    try {
+        const { payload } = request;
+        const image = payload.image;
+
+        // Validasi jika file tidak ada
+        if (!image || !image._data) {
+            return h.response({
                 status: 'fail',
-                message: 'Gagal menambahkan gambar. Gambar tidak boleh lebih dari 1MB.',
-            });
-            response.code(413);
-            return response;
+                message: 'Terjadi kesalahan dalam melakukan prediksi',
+            }).code(400);
         }
 
-        const isCancer = Math.random() > 0.5;
+        // Validasi ukuran file
+        const MAX_SIZE = 1000000; // 1MB
+        if (image._data.length > MAX_SIZE) {
+            return h.response({
+                status: 'fail',
+                message: 'Payload content length greater than maximum allowed: 1000000',
+            }).code(413);
+        }
 
-        const response = {
+        // Simulasi hasil prediksi
+        const isCancer = Math.random() > 0.5; // Dummy logic
+        const result = isCancer ? 'Cancer' : 'Non-cancer';
+        const suggestion = isCancer 
+            ? 'Segera periksa ke dokter!' 
+            : 'Penyakit kanker tidak terdeteksi.';
+
+        return h.response({
             status: 'success',
-            message: 'Model terprediksi dengan benar.',
+            message: 'Model is predicted successfully',
             data: {
-                id: '13243546',
-                result: isCancer ? 'Cancer' : 'Non-cancer',
-                suggestion: isCancer ? 'Segera periksa ke dokter!' : 'Penyakit kanker tidak terdeteksi.',
+                id: nanoid(),
+                result,
+                suggestion,
                 createdAt: new Date().toISOString(),
             },
-        };
-        response.code(200);
-        return response;
+        }).code(200);
+
     } catch (error) {
-        const response = h.response({
+        console.error(error);
+        return h.response({
             status: 'fail',
             message: 'Terjadi kesalahan dalam melakukan prediksi',
-        })
-        response.code(400);
-        return response;
+        }).code(400);
     }
 };
 
-module.exports = { predictHandler };
+module.exports = { handlePredict };

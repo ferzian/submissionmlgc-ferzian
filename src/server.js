@@ -1,24 +1,26 @@
-require('dotenv').config();
-
 const Hapi = require('@hapi/hapi');
-const { routes } = require('./routes');
+const routes = require('./routes');
 
 const init = async () => {
     const server = Hapi.server({
-        port: process.env.PORT,
-        host: process.env.HOST,
+        port: 3000,
+        host: 'localhost',
         routes: {
-            cors: true,
-            payload: {
-                maxBytes: process.env.MAX_PAYLOAD_SIZE,
+            cors: {
+                origin: ['*'], // Allow CORS for all origins
             },
         },
-    })
+    });
 
-    routes(server);
+    server.route(routes);
 
     await server.start();
     console.log(`Server running on ${server.info.uri}`);
 };
+
+process.on('unhandledRejection', (err) => {
+    console.log(err);
+    process.exit(1);
+});
 
 init();

@@ -1,20 +1,19 @@
-const { predictHandler } = require('./handler');
+const { handlePredict } = require('./handler');
 
-const routes = (server) => {
-    server.route({
+const routes = [
+    {
         method: 'POST',
         path: '/predict',
         options: {
             payload: {
-                output: 'file',
-                allow: 'multipart/form-data',
+                output: 'data',
                 parse: true,
-                multipart: true,
-                maxBytes: 1000000,
+                allow: 'multipart/form-data',
+                maxBytes: 1000000, // Maksimal 1MB
             },
         },
-        handler: predictHandler,
-    });
-};
+        handler: handlePredict,
+    },
+];
 
-module.exports = { routes };
+module.exports = routes;
