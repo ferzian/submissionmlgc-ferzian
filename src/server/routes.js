@@ -1,4 +1,4 @@
-const {postPredictHandler} = require('../server/handler');
+const postPredictHandler = require('../server/handler');
 
 const routes = [
   {
@@ -11,7 +11,7 @@ const routes = [
         multipart: true
       }
     }
-  }
+  },
 ];
 
 module.exports = routes;
