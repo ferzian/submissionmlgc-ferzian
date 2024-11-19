@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Ekspose port
-EXPOSE 3000
+EXPOSE 8080
 
 # Jalankan aplikasi
 CMD ["node", "src/server/server.js"]
