@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Jalankan aplikasi
-CMD ["node", "src/server.js"]
+CMD ["node", "src/server/server.js"]
