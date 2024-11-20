@@ -1,20 +1,17 @@
-# Gunakan Node.js image
 FROM node:18
 
-# Set working directory
 WORKDIR /usr/src/app
 
-# Salin file package.json dan package-lock.json
 COPY package*.json ./
 
-# Install dependencies
 RUN npm install --production
 
-# Salin seluruh kode
 COPY . .
 
-# Ekspose port
+COPY submissionmlgc-mferzian-b321704510d1.json /home/m_ferzian09/submissionmlgc-ferzian/
+
+ENV GOOGLE_APPLICATION_CREDENTIALS="/home/m_ferzian09/submissionmlgc-ferzian/submissionmlgc-mferzian-b321704510d1.json"
+
 EXPOSE 8080
 
-# Jalankan aplikasi
 CMD ["npm", "start"]
