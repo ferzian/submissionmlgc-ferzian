@@ -2,13 +2,13 @@
 FROM node:18
 
 # Set working directory
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # Salin file package.json dan package-lock.json
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
 # Salin seluruh kode
 COPY . .
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8080
 
 # Jalankan aplikasi
-CMD ["node", "src/server/server.js"]
+CMD ["npm", "start"]

@@ -1,6 +1,7 @@
 const predictClassification = require('../services/inferenceService');
 const crypto = require('crypto');
 const storeData = require('../services/storeData');
+const loadAllData = require("../services/loadData");
 
 
 async function postPredictHandler(request, h) {
@@ -18,7 +19,7 @@ async function postPredictHandler(request, h) {
     "createdAt": createdAt
   }
 
-  // await storeData(id,data);
+  await storeData(id, data);
 
   const response = h.response({
     status: 'success',
@@ -29,4 +30,24 @@ async function postPredictHandler(request, h) {
   return response;
 }
 
-module.exports = postPredictHandler; 
+async function getAllDataHandler(request, h) {
+  try {
+    const allData = await loadAllData();
+    const response = h.response({
+      status: "success",
+      data: allData,
+    });
+    response.code(200);
+    return response;
+  } catch (error) {
+    console.error("An unexpected error occurred:", error);
+    return h
+      .response({
+        status: "failed",
+        message: "An unexpected error occurred",
+      })
+      .code(500);
+  }
+}
+
+module.exports = { postPredictHandler, getAllDataHandler }; 
